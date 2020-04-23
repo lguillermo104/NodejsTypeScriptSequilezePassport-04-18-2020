@@ -6,7 +6,7 @@ const router = Router();
 
 
 router.get('/special',passport.authenticate('jwt', { session:false }), (req,res) =>{
-    res.send('success');
+    res.send('bienvenido al sistema esta logeado y puede usar la aplicacion. enjoy');
 
 });
 
