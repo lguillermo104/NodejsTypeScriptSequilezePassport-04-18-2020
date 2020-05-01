@@ -6,8 +6,8 @@ const router = Router();
 import { signIn, signUp } from '../controllers/user.controller'
 
 // Creamos las rutas y asignamos el controlador.
-router.post('/registrar', signUp );
-router.post('/entrar', signIn );
+router.post('/registrar/usuario', signUp );
+router.post('/entrar/usuario', signIn );
 
 
 //exportamos la ruta.

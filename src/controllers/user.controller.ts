@@ -30,9 +30,18 @@ export const signUp = async (req: Request, res: Response): Promise<Response>=> {
 
     let newUser = new User(req.body);
 
-    await newUser.save();
+    try {
+        await newUser.save();
+        return res.status(201).json(newUser);
+        
+    } catch (error) {
+        return res.status(500).json(error);
+        
+    }
 
-    return res.status(201).json(newUser);
+    
+
+    
     
 }
 
@@ -55,8 +64,19 @@ export const signIn = async (req: Request, res: Response) => {
   const ismatch = await user.comparePassword(password);
 
   if (ismatch) {
-      let token = createToken(user); 
-      return res.status(200).json(token);
+    // crear el token  
+    let token = createToken(user);
+
+       // formatear la respuesta 
+      let respuesta = {
+        status: 200,
+        ok: true,
+        data: {
+            token: token 
+        }
+      };
+       
+      return res.status(200).json(respuesta);
   }
 
   return res.status(400).json('the email o password is incorrect')

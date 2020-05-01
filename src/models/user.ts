@@ -8,6 +8,11 @@ export interface IUser extends Document{
 
 }
 
+var rolesValidos = {
+    values: ['ADMIN_ROLE', 'USER_ROLE'],
+    message: '{VALUE} no es un rol permitido'
+}
+
 const userSchema = new Schema({
     email: {
         type: String,
@@ -20,6 +25,19 @@ const userSchema = new Schema({
         type: String,
         required: true
 
+    },
+    img: {
+        type: String
+    },
+    role: {
+        type: String,
+        required: true,
+        default: 'USER_ROLE',
+        enum: rolesValidos
+    },
+    active: {
+        type: Boolean,
+        default: true
     }
 
 });
