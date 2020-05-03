@@ -16,11 +16,6 @@ function  createToken(user: IUser) {
 
 // Registar el usuario
 export const signUp =  errorHelper( async(req: Request, res: Response): Promise<Response>=> {
-
-    if (!req.body.email || !req.body.password ) {
-        throw createError(400, "El email o la Contraseña no puede estar en blanco",{ cod: 201 })
-    }
-
    
 
     let newUser = new User(req.body);

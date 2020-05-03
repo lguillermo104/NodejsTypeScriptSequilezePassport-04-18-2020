@@ -24,22 +24,22 @@ const userSchema = new Schema({
             },
             message: props => `${props.value}:  Este emial no es valido!`
           },
-        unique: true,
+        unique: "El email es requerido",
         required: true,
         lowercase: true,
         trim: true
     },
     password: {
         type: String,
-        required: true
+        required: "la Contraseña es requerida",
+        maxlength:[6,"La contraseña debe tener nimino 6 caracteres"]
 
     },
     img: {
         type: String
     },
     role: {
-        type: String,
-        required: true,
+        type: String,        
         default: 'USER_ROLE',
         enum: rolesValidos
     },

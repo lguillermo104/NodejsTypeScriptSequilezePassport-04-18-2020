@@ -7,7 +7,7 @@ export default  function(callback:Function) {
 
             
         } catch (error) {
-                if (error.name) {
+                if (error.name = "ValidationError") {
                     res.status(400).json(error);
 
                 }else {
