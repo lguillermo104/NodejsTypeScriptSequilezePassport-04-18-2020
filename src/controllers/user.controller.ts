@@ -3,6 +3,9 @@ import  User, { IUser } from '../models/user'
 import jwt from 'jsonwebtoken'
 import  config from '../config/config'
 
+import errorHelper from '../middlewares/errors';
+var createError = require('http-errors');
+
 // Crear el token 
 function  createToken(user: IUser) {
     return jwt.sign({ id: user.id, email: user.email}, config.jwtSecret, {
@@ -12,10 +15,10 @@ function  createToken(user: IUser) {
 }
 
 // Registar el usuario
-export const signUp = async (req: Request, res: Response): Promise<Response>=> {
+export const signUp =  errorHelper( async(req: Request, res: Response): Promise<Response>=> {
 
     if (!req.body.email || !req.body.password ) {
-        return res.status(400).json({ msg: 'Please. send your email and password' });
+        throw createError(400, "El email o la Contraseña no puede estar en blanco",{ cod: 201 })
     }
 
     const email = req.body.email;
@@ -25,25 +28,16 @@ export const signUp = async (req: Request, res: Response): Promise<Response>=> {
 
     // Si el usuario existe.
     if(user) {
-        return res.status(400).json({msg: 'the user already exists'});  
+        throw createError(400, "Este email ya esta registrado",{ ok:false, error: { cod: 201, name:"validatorError", path: "email", value: email} })  
     }
 
     let newUser = new User(req.body);
 
-    try {
+    
         await newUser.save();
-        return res.status(201).json(newUser);
-        
-    } catch (error) {
-        return res.status(500).json(error);
-        
-    }
-
+        return res.status(201).json(newUser);   
     
-
-    
-    
-}
+})
 
 // Logear un usuario.
 export const signIn = async (req: Request, res: Response) => {
