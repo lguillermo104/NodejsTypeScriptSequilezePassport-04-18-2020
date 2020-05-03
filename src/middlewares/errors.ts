@@ -7,9 +7,11 @@ export default  function(callback:Function) {
 
             
         } catch (error) {
-            if (error.name) {
-                res.status(400).json(error);
-            }            
+            if (error.status) {
+                res.status(error.status).json(error);
+            }  else {
+                res.status(500).json("Error en el Servidor intentelo mas tarde");
+            }          
         }
 
     }
