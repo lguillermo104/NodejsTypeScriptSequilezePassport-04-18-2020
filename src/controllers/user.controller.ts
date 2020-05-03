@@ -21,15 +21,7 @@ export const signUp =  errorHelper( async(req: Request, res: Response): Promise<
         throw createError(400, "El email o la Contraseña no puede estar en blanco",{ cod: 201 })
     }
 
-    const email = req.body.email;
-
-    // Buscamos el usuario en la base de datos.
-    const user = await User.findOne({email});
-
-    // Si el usuario existe.
-    if(user) {
-        throw createError(400, "Este email ya esta registrado",{ ok:false, error: { cod: 201, name:"validatorError", path: "email", value: email} })  
-    }
+   
 
     let newUser = new User(req.body);
 

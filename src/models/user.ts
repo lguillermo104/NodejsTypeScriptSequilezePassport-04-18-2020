@@ -1,4 +1,5 @@
 import { model, Schema, Document, SchemaType } from 'mongoose' 
+var uniqueValidator = require('mongoose-unique-validator');
 import bcrypt from 'bcrypt';
 
 export interface IUser extends Document{
@@ -13,9 +14,16 @@ var rolesValidos = {
     message: '{VALUE} no es un rol permitido'
 }
 
+// Definimo el modelo.
 const userSchema = new Schema({
     email: {
         type: String,
+        validate: {
+            validator: function(v:any) {
+              return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v);
+            },
+            message: props => `${props.value}:  Este emial no es valido!`
+          },
         unique: true,
         required: true,
         lowercase: true,
@@ -41,6 +49,9 @@ const userSchema = new Schema({
     }
 
 });
+
+// Apply the uniqueValidator plugin to userSchema.
+userSchema.plugin(uniqueValidator, { message: 'El {PATH} debe de ser unico.' });
 
 // Encriptar la contraseña del usuario.
 userSchema.pre<IUser>('save', async function(next){
