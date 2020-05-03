@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "dev" : "tsc-watch --onSuccess  \"node dist/index.js\" ",
+    "dev": "tsc-watch --onSuccess  \"node dist/index.js\" ",
     "build": "tsc"
   },
   "keywords": [],
@@ -15,6 +15,7 @@
     "bcrypt": "^4.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "http-errors": "^1.7.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.9",
     "morgan": "^1.10.0",
