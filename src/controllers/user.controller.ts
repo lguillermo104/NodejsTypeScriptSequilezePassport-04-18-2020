@@ -22,15 +22,13 @@ export const signUp =  errorHelper( async(req: Request, res: Response): Promise<
 
     
         await newUser.save();
-        return res.status(201).json(newUser);   
+        return res.status(201).json( {ok:true, status:201, menssage:'Usuario Registrado Exitosamente', data: newUser});   
     
 })
 
 // Logear un usuario.
-export const signIn = async (req: Request, res: Response) => {
-    if (!req.body.email || !req.body.password ) {
-        return res.status(400).json({ msg: 'Please. send your email and password' });
-    }
+export const signIn = errorHelper( async (req: Request, res: Response) => {
+   
 
     const email:string = req.body.email;
     const password: string = req.body.password;
@@ -38,7 +36,7 @@ export const signIn = async (req: Request, res: Response) => {
    const user = await User.findOne({email});
 
    if (!user) {
-       return res.status(400).json({msg: 'the user does not exists'});
+       return res.status(400).json({ok: false, status: 400, message: 'Email o password incorrecta'});
    }
 
 
@@ -52,7 +50,9 @@ export const signIn = async (req: Request, res: Response) => {
       let respuesta = {
         status: 200,
         ok: true,
+        message: 'login exitoso',
         data: {
+            user: user,
             token: token 
         }
       };
@@ -60,6 +60,6 @@ export const signIn = async (req: Request, res: Response) => {
       return res.status(200).json(respuesta);
   }
 
-  return res.status(400).json('the email o password is incorrect')
+  return res.status(400).json({ok: false, status: 400, message: 'Email o password incorrecta'});
     
-}
+})
