@@ -32,7 +32,7 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: "la Contraseña es requerida",
-        maxlength:[6,"La contraseña debe tener nimino 6 caracteres"]
+        minlength:[6,"La contraseña debe tener nimino 6 caracteres"]
 
     },
     img: {
