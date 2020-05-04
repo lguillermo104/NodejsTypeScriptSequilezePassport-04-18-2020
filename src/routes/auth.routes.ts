@@ -1,5 +1,6 @@
 // Importamos el router desde express.
 import  { Router } from 'express'
+var jimp = require('sharp');
 const router = Router();
 
 
@@ -14,7 +15,7 @@ router.post('/registrar/usuario', signUp );
 router.post('/entrar/usuario', signIn );
 
 router.route('/photos/usuario')
-    .post(multer.single('image'),  createPhoto)
+    .post(multer.single('image'), createPhoto)
     .get(getphotos)
 
 

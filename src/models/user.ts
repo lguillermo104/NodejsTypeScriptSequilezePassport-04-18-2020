@@ -25,7 +25,7 @@ const userSchema = new Schema({
             },
             message: props => `${props.value}:  Este emial no es valido!`
           },
-        unique: "El email es requerido",
+        unique: "El email debe de ser unico",
         required: true,
         lowercase: true,
         trim: true
