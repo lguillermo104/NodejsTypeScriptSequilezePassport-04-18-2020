@@ -11,7 +11,7 @@ export default  function(callback:Function) {
                     res.status(400).json(error);
 
                 }else {
-                    res.status(500).json("Error en el servidor");
+                    res.status(500).json(error);
                 }
                 
            

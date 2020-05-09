@@ -2,36 +2,35 @@ import { model, Schema, Document, SchemaType, Types } from 'mongoose'
 var uniqueValidator = require('mongoose-unique-validator');
 
 
-export interface ICentrosMedico extends Document{
-    email: string;
-    rncCedula: string;
+export interface IDatosMedico extends Document{
+    nombre: string;
+    especialidad: string;
     direccion: string;
     agendaTelefonica?: { tel?: string, fax?: string, whaptsapp?: string } ;
-    medicos: object ;
+    medicos: object;
     
 }
 
 
 
 // Definimo el modelo.
-const CentrosMedicoSchema = new Schema({
+const DatosMedicoSchema = new Schema({
     nombre: {
         type: String,       
         unique: "El nombre debe de ser unico",
         required: true,
         lowercase: true,
         trim: true,
-        minlength: [3]
+        minlength: [3, 'El nombre debe de tener minimo 3 caracteres']
     },
-    rncCedula: {
-        type: String,
-        required: "El rncCedula es requerido",
+    especialidad:{
+        type: String,        
         unique: "El rncCedula debe de ser unico",
 
     },
-    direccion: {
+    cedula: {
         type: String,
-        required: "La direcion es requedida"
+        required: "la cedula es requerida"
     },
     agendaTelefonica:[{
         tel : {
@@ -46,10 +45,14 @@ const CentrosMedicoSchema = new Schema({
             type: String
         }        
     }],
-    medicos: [{
-         type: Schema.Types.ObjectId, 
-         ref: 'datosMedico'   
-        }]
+    email: {
+         type: String   
+        },
+    centroMedico: [{
+        type: Schema.Types.ObjectId, 
+        ref: 'centrosMedico'
+
+    }]
 
 
 });
@@ -57,4 +60,4 @@ const CentrosMedicoSchema = new Schema({
 
 
 
-export default model<ICentrosMedico>('CentrosMedico', CentrosMedicoSchema);
+export default model<IDatosMedico>('DatosMedico', DatosMedicoSchema);
