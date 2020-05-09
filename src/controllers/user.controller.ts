@@ -81,9 +81,17 @@ export const buscarUsuarioPorId =  errorHelper( async(req: Request, res: Respons
 // bucar el suario por id.
 export const listarTodosUsuarios =  errorHelper( async(req: Request, res: Response): Promise<Response>=> {    
 
-    let user = await User.find({});
+    let  desde  = req.query.desde || 0;
+    desde = Number(desde);
 
-    return res.status(200).json(user);          
+    console.log(desde);
+    let user = await User.find({})
+        .skip(desde)
+        .limit(5);
+
+    let total = await User.find({}).count();
+
+    return res.status(200).json({ok: true, data:{user: user, total: total} });          
     
 })
 
@@ -94,24 +102,57 @@ export const actualizarUsuario =  errorHelper( async(req: Request, res: Response
    let  { id } = req.params;
    let { passwordActual } = req.body;
 
-
+    //Buscamos el usuario por el id.
     let user:any = await User.findById(id)
 
     if (!user) {
         return res.status(400).json( {ok:false, menssage: 'El usuario con el id' + id + ' no existe. '});
     }
 
+    // Comparamos si la contraseña es correcta al registro de usuario.
     const ismatch = await user.comparePassword(passwordActual);
 
+    // si la contraseña es es incorrecta mandamo una repuesta contraseña incorrecta.
     if ( !ismatch ) return  res.status(400).json({ok: false, message: "La contraseña actual no es correcta." })
 
+    //Actualiza el usuario y debuelve la repuesta.
     user.email = req.body.email;
     user.password = req.body.password;
 
     user = await user.save();
-    return res.status(200).json({ok: true, menssage: 'Usuario actualizado corectamente', data: user})
+    return res.status(200).json({ok: true, menssage: 'Usuario actualizado corectamente', data: user})          
+    
+});
 
-           
+// Buscar Usuario por email.
+
+// bucar el suario por id.
+export const buscarUsuarioPorEmial =  errorHelper( async(req: Request, res: Response): Promise<Response>=> {  
+    
+    let user;
+    let total;
+
+    let  desde  = req.query.desde || 0;
+    let email = req.query.email || "";
+    desde = Number(desde);
+    email = String(email);
+
+    if (!email){ 
+         user = await User.find({}, { _id:1, role:1, active:1, email:1})
+            .skip(desde)
+            .limit(5);
+
+             total = await User.find({}, { _id:1, role:1, active:1, email:1}).count();
+    } else {
+        user =  await User.find({}, { _id:1, role:1, active:1, email:1}).or([{email: {$regex: email, $options: 'i'}}])
+        .skip(desde)
+        .limit(5)
+
+         total = await User.find({}, { _id:1, role:1, active:1, email:1}).or([{email: {$regex: email, $options: 'i'}}]).count();
+
+    }
+
+    return res.status(200).json({ok: true, data:{user: user, total: total} });          
     
 })
 

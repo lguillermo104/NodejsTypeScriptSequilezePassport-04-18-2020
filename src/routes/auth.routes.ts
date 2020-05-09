@@ -5,7 +5,7 @@ const router = Router();
 
 
 // importamos los controlladores.
-import { signIn, signUp, buscarUsuarioPorId, listarTodosUsuarios, actualizarUsuario} from '../controllers/user.controller';
+import { signIn, signUp, buscarUsuarioPorId, listarTodosUsuarios, actualizarUsuario, buscarUsuarioPorEmial} from '../controllers/user.controller';
 import { getphotos, createPhoto } from '../controllers/img.controller';
 
 import multer from '../libs/multer';
@@ -16,6 +16,9 @@ router.post('/entrar/usuario', signIn );
     
 router.route('/usuarios')
     .get(listarTodosUsuarios)
+
+    router.route('/usuarios/buscar')
+    .get(buscarUsuarioPorEmial)
     
 
 router.route('/usuario/:id')
