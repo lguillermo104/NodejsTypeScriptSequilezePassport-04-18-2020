@@ -106,7 +106,7 @@ export const actualizarUsuario =  errorHelper( async(req: Request, res: Response
     let user:any = await User.findById(id)
 
     if (!user) {
-        return res.status(400).json( {ok:false, menssage: 'El usuario con el id' + id + ' no existe. '});
+        return res.status(400).json( {ok:false, menssage: 'El usuario con el id ' + id + ' no existe. '});
     }
 
     // Comparamos si la contraseña es correcta al registro de usuario.
@@ -155,4 +155,29 @@ export const buscarUsuarioPorEmial =  errorHelper( async(req: Request, res: Resp
     return res.status(200).json({ok: true, data:{user: user, total: total} });          
     
 })
+
+// Borrar usuario por id.
+export const BorrarUsuarioPorId =  errorHelper( async(req: Request, res: Response): Promise<Response>=> {
+   
+
+    const id = req.params.id;
+
+    let user = await User.findByIdAndDelete(id);
+
+    return res.status(200).json({ok: true, message: 'Usuario eliminado correctamente'});          
+    
+});
+
+// Actualizar el  usuario sin cambiar la contraseña.
+export const actualizarUsuarioSinContraseña =  errorHelper( async(req: Request, res: Response): Promise<Response>=> {   
+
+    
+    let  { id } = req.params;
+ 
+     //Buscamos el usuario por el id.
+     let user:any = await User.findByIdAndUpdate(id, req.body); 
+    
+     return res.status(200).json({ok: true, menssage: 'Usuario actualizado corectamente', data: {user: user} })          
+     
+ });
 

@@ -8,6 +8,7 @@ import passportMiddleware from './middlewares/passport'
 // Importamos las rutas de la aplicacion.
 import authRoutes from './routes/auth.routes'
 import specialRoutes from './routes/special.routes'
+import centroMedico from  './routes/centroMedico'; 
 
 // Initilizations
 const app = express();
@@ -35,6 +36,7 @@ app.get('/', (req,  res) => {
 
 
 app.use(authRoutes);
+app.use(centroMedico);
 app.use(specialRoutes);
 
 
