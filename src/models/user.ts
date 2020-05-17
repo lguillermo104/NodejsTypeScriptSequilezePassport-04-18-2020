@@ -47,7 +47,11 @@ const userSchema = new Schema({
     active: {
         type: Boolean,
         default: true
-    }
+    }, 
+    centroMedico: [{
+        type: Schema.Types.ObjectId,
+        ref: 'centrosMedicos'
+    }]
 
 });
 

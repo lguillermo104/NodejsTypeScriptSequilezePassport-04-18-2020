@@ -41,10 +41,11 @@
 import { Router } from 'express';         
 import mongoose  from 'mongoose';
 const router = Router();
-import { crearCentrosMedicos, BuscarTodosCentrosMedicos, BuscarCentrosMedicosPorId, BuscarCentrosMedicosPorNombre, eliminarCentroMedico, actualizarCentroMedico } from '../controllers/centrosMedicos.controller';
+import { crearCentrosMedicos, BuscarTodosCentrosMedicos, BuscarCentrosMedicosPorId, BuscarCentrosMedicosPorNombre, eliminarCentroMedico, actualizarCentroMedico, borrar } from '../controllers/centrosMedicos.controller';
 
 
-
+router.route('/centromedico/todos')
+        .get(borrar)
 
 router.route('/centromedico')
     .post(crearCentrosMedicos)

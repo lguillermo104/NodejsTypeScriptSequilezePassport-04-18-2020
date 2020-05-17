@@ -1,5 +1,6 @@
 import { Request, Response} from 'express'
 import  User, { IUser } from '../models/user'
+import centrosMedicos from '../models/centrosMedicos.model';
 import jwt from 'jsonwebtoken'
 import  config from '../config/config'
 import bcrypt from 'bcrypt';
@@ -180,4 +181,7 @@ export const actualizarUsuarioSinContraseña =  errorHelper( async(req: Request,
      return res.status(200).json({ok: true, menssage: 'Usuario actualizado corectamente', data: {user: user} })          
      
  });
+
+
+
 

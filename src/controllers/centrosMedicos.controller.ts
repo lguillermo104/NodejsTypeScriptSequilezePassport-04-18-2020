@@ -2,42 +2,35 @@
 import mongoose from 'mongoose';
 import { Router, Request, Response, NextFunction, response } from 'express';
 import centrosMedicos, {ICentrosMedicos}  from '../models/centrosMedicos.model';
+import User from '../models/user';
+import  asyncHelper  from '../middlewares/errors' 
 
 
 
 // Crear centros medicos.
-export const  crearCentrosMedicos = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+export const  crearCentrosMedicos = asyncHelper (async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
 
-    let user = req.query.user; 
-    try {
-        let { nombre, rncCedula, direccion, AgendaTelefonica, email, medicos } = req.body;
+    let userId:string = String(req.query.user);
+   
+    
+        let { nombre, rncCedula, direccion, tel, fax, whatsapp, email, medicos, prov } = req.body;
+        console.log(tel);
 
-        let centroMedico:ICentrosMedicos = new centrosMedicos({ nombre, rncCedula, direccion, AgendaTelefonica, email, medicos});
+        let centroMedico:ICentrosMedicos = new centrosMedicos({ nombre, rncCedula, direccion, provincia: prov, AgendaTelefonica: { tel, fax, whatsapp }, email, medicos, usuario: userId });
 
         let savedCentroMedico  = await centroMedico.save();
 
-        if (savedCentroMedico) {
-            return res.status(200).json(savedCentroMedico);
-        }else {
-            return res.status(500).json('Error al guardar el centro medico'); 
-        }
-    
         
-    } catch (error) {
-        return res.status(500).json('Error al guardar el centro medico'); 
-        
-    }  
-}
+            return res.status(200).json(savedCentroMedico);           
+   
+});
 
 // Buscar todos los centros medicos 
 export const BuscarTodosCentrosMedicos = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
 
-    let result = await centrosMedicos.find({}, {nombre:1, direccion:1, rncCedula:1, AgendaTelefonica:1, email:1, medicos:1});
+    let result = await centrosMedicos.find({}, {nombre:1, direccion:1, rncCedula:1, AgendaTelefonica:1, email:1, medicos:1, usuario:1, provincia:1});
 
-   
-
-   console.log(centrosMedicos.find());
-   return res.status(200).json(result);
+    return res.status(200).json(result);
 
 }
 
@@ -49,7 +42,7 @@ export const BuscarCentrosMedicosPorId = async (req: Request, res: Response, nex
     let result = await centrosMedicos.findById(id);  
 
     
-   return res.status(200).json(result);
+   return res.status(200).json({ ok: true, message: 'Centro medico encontrado exitosamente', data:  result });
 
 }
 
@@ -96,11 +89,17 @@ export const actualizarCentroMedico = async (req: Request, res: Response, next: 
     } catch (error) {
         return res.status(200).json('Error al actualizar el usuario');
         
-    }    
-
+    } 
+    
 }
 
+// para borrar
+export const borrar = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+   let result  = await centrosMedicos.find({}).populate('usuario');
 
+   return res.json(result)
+    
+}
 
 
 
