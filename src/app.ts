@@ -9,6 +9,7 @@ import passportMiddleware from './middlewares/passport'
 import authRoutes from './routes/auth.routes'
 import specialRoutes from './routes/special.routes'
 import centroMedico from  './routes/centroMedico'; 
+import  datosMedicosRoutes from './routes/datosMedicos.routes';
 
 // Initilizations
 const app = express();
@@ -37,6 +38,7 @@ app.get('/', (req,  res) => {
 
 app.use(authRoutes);
 app.use(centroMedico);
+app.use(datosMedicosRoutes);
 app.use(specialRoutes);
 
 
