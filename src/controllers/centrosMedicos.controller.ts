@@ -29,8 +29,8 @@ export const  crearCentrosMedicos = asyncHelper (async (req: Request, res: Respo
 export const BuscarTodosCentrosMedicos = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
 
     let result = await centrosMedicos.find({}, {nombre:1, direccion:1, rncCedula:1, AgendaTelefonica:1, email:1, medicos:1, usuario:1, provincia:1});
-
-    return res.status(200).json(result);
+    let total = await centrosMedicos.find({}).count();
+    return res.status(200).json({ ok: true, data: { centroMedico: result  }, total: total});
 
 }
 
