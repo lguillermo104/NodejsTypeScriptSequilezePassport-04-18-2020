@@ -14,7 +14,6 @@ export const  crearCentrosMedicos = asyncHelper (async (req: Request, res: Respo
    
     
         let { nombre, rncCedula, direccion, tel, fax, whatsapp, email, medicos, prov } = req.body;
-        console.log(tel);
 
         let centroMedico:ICentrosMedicos = new centrosMedicos({ nombre, rncCedula, direccion, provincia: prov, AgendaTelefonica: { tel, fax, whatsapp }, email, medicos, usuario: userId });
 
@@ -28,7 +27,11 @@ export const  crearCentrosMedicos = asyncHelper (async (req: Request, res: Respo
 // Buscar todos los centros medicos 
 export const BuscarTodosCentrosMedicos = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
 
-    let result = await centrosMedicos.find({}, {nombre:1, direccion:1, rncCedula:1, AgendaTelefonica:1, email:1, medicos:1, usuario:1, provincia:1});
+    let  porPagina  = Number(req.query.porPagina) || 8; 
+    let pagina = Number(req.query.pagina) || 1  
+    console.log(pagina); 
+
+    let result = await centrosMedicos.find({}, {nombre:1, direccion:1, rncCedula:1, AgendaTelefonica:1, email:1, medicos:1, usuario:1, provincia:1}).skip((porPagina * pagina) -porPagina).limit(porPagina);
     let total = await centrosMedicos.find({}).count();
     return res.status(200).json({ ok: true, data: { centroMedico: result  }, total: total});
 
@@ -80,10 +83,15 @@ export const eliminarCentroMedico = async (req: Request, res: Response, next: Ne
 
 // Actualizar centro medico
 export const actualizarCentroMedico = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-    try {        
-
-        let result = await centrosMedicos.findByIdAndUpdate(req.body.id, req.body);
+    try {   
         
+        let { id } = req.params;      
+        
+        let { nombre, rncCedula, direccion, tel, fax, whatsapp, email, medicos, prov } = req.body;
+
+        let result = await centrosMedicos.findByIdAndUpdate(id, { nombre, rncCedula, direccion, provincia: prov, AgendaTelefonica: { tel, fax, whatsapp }, email});
+
+        console.log(result);        
         return res.status(200).json('usuario Acutalizado Correctamente');
         
     } catch (error) {

@@ -50,12 +50,12 @@ router.route('/centromedico/todos')
 router.route('/centromedico')
     .post(crearCentrosMedicos)
     .get(BuscarTodosCentrosMedicos)
-    .put(actualizarCentroMedico)
 
 
 router.route ('/centromedico/:id')
     .get(BuscarCentrosMedicosPorId)
-    .delete(eliminarCentroMedico)
+    .delete(eliminarCentroMedico)    
+    .put(actualizarCentroMedico)
 
     router.route ('/centromedico/buscar')
         .post(BuscarCentrosMedicosPorNombre)
