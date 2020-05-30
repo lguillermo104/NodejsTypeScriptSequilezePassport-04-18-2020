@@ -25,7 +25,7 @@ export const  crearCentrosMedicos = asyncHelper (async (req: Request, res: Respo
 });
 
 // Buscar todos los centros medicos 
-export const BuscarTodosCentrosMedicos = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+export const BuscarTodosCentrosMedicos = asyncHelper(async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
 
     let  porPagina  = Number(req.query.porPagina) || 8; 
     let pagina = Number(req.query.pagina) || 1  
@@ -35,10 +35,10 @@ export const BuscarTodosCentrosMedicos = async (req: Request, res: Response, nex
     let total = await centrosMedicos.find({}).count();
     return res.status(200).json({ ok: true, data: { centroMedico: result  }, total: total});
 
-}
+})
 
 // Buscar los centro medicos por id.
-export const BuscarCentrosMedicosPorId = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+export const BuscarCentrosMedicosPorId = asyncHelper(async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
 
     let { id }  = req.params
 
@@ -47,11 +47,11 @@ export const BuscarCentrosMedicosPorId = async (req: Request, res: Response, nex
     
    return res.status(200).json({ ok: true, message: 'Centro medico encontrado exitosamente', data:  result });
 
-}
+})
 
 
 // Buscar por nombre o rncCedula.
-export const BuscarCentrosMedicosPorNombre = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+export const BuscarCentrosMedicosPorNombre = asyncHelper(async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
 
    let { nombre, rncCedula, id } = req.body;
 
@@ -63,27 +63,23 @@ export const BuscarCentrosMedicosPorNombre = async (req: Request, res: Response,
     
    return res.status(200).json(result);
 
-}
+})
 
 // eliminar centro medico.
-export const eliminarCentroMedico = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-    try {
+export const eliminarCentroMedico = asyncHelper ( async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+   
         let { id } = req.params
 
         let result = await centrosMedicos.findByIdAndDelete(id);
         
-        return res.status(200).json('Usuario eliminado correctamente');
+        return res.status(200).json('Centro Medicos eliminado correctamente');
         
-    } catch (error) {
-        return res.status(200).json('Error al emiminar el usuario o usuario no encontrado');
-        
-    }    
-
-}
+   
+})
 
 // Actualizar centro medico
-export const actualizarCentroMedico = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-    try {   
+export const actualizarCentroMedico = asyncHelper ( async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+     
         
         let { id } = req.params;      
         
@@ -94,20 +90,17 @@ export const actualizarCentroMedico = async (req: Request, res: Response, next: 
         console.log(result);        
         return res.status(200).json('usuario Acutalizado Correctamente');
         
-    } catch (error) {
-        return res.status(200).json('Error al actualizar el usuario');
-        
-    } 
+   
     
-}
+})
 
 // para borrar
-export const borrar = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+export const borrar = asyncHelper ( async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
    let result  = await centrosMedicos.find({}).populate('usuario');
 
    return res.json(result)
     
-}
+})
 
 
 
